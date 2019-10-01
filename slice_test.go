@@ -1,7 +1,7 @@
 package slice
 
 // @author  Mikhail Kirillov <mikkirillov@yandex.ru>
-// @version 1.002
+// @version 1.003
 // @date    2019-10-01
 
 import (
@@ -85,4 +85,57 @@ func TestEqual(t *testing.T) {
 	tF([]string{"1", "3", "5", "7"}, []string{"1", "3", "5", "7"}, true)
 	tF(list, []string{"1", "3", "5", "7"}, true)
 	tF(list, []string{"1", "3", "6", "7"}, false)
+}
+
+func TestAppendNewValue(t *testing.T) {
+
+	var list []string
+
+	AppendNewValue(&list, "")
+	if !Equal(list, []string{""}) {
+		t.Fatal("Add \"\" failed")
+	}
+
+	AppendNewValue(&list, "")
+	if !Equal(list, []string{""}) {
+		t.Fatal("Add \"\" failed")
+	}
+
+	AppendNewValue(&list, "1")
+	if !Equal(list, []string{"", "1"}) {
+		t.Fatal("Add \"1\" failed")
+	}
+
+	AppendNewValue(&list, "2")
+	if !Equal(list, []string{"", "1", "2"}) {
+		t.Fatal("Add \"2\" failed")
+	}
+
+	AppendNewValue(&list, "0")
+	if !Equal(list, []string{"", "1", "2", "0"}) {
+		t.Fatal("Add \"0\" failed")
+	}
+
+	AppendNewValue(&list, "2")
+	if !Equal(list, []string{"", "1", "2", "0"}) {
+		t.Fatal("Add \"2\" failed")
+	}
+
+	AppendNewValue(nil, 12)
+	AppendNewValue("12", 12)
+
+	var i int
+
+	AppendNewValue(&i, 12)
+
+	ilist := []int{5, 8, 9, 13}
+	AppendNewValue(&ilist, 2)
+	if !Equal(ilist, []int{5, 8, 9, 13, 2}) {
+		t.Fatal("Add 2 failed")
+	}
+
+	AppendNewValue(&ilist, 8)
+	if !Equal(ilist, []int{5, 8, 9, 13, 2}) {
+		t.Fatal("Add 8 failed")
+	}
 }

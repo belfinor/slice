@@ -1,7 +1,7 @@
 package slice
 
 // @author  Mikhail Kirillov <mikkirillov@yandex.ru>
-// @version 1.003
+// @version 1.004
 // @date    2019-10-01
 
 import (
@@ -109,4 +109,29 @@ func Equal(l1 interface{}, l2 interface{}) bool {
 	}
 
 	return false
+}
+
+func AppendNewValue(listPtr interface{}, obj interface{}) {
+
+	if listPtr == nil {
+		return
+	}
+
+	vp := reflect.ValueOf(listPtr)
+	if vp.Type().Kind() != reflect.Ptr {
+		return
+	}
+
+	vlist := vp.Elem()
+	if vlist.Type().Kind() != reflect.Slice {
+		return
+	}
+
+	if h, _ := Contain(vlist.Interface(), obj); h {
+		return
+	}
+
+	vobj := reflect.ValueOf(obj)
+
+	vlist.Set(reflect.Append(vlist, vobj))
 }
