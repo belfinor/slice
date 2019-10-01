@@ -1,8 +1,8 @@
 package slice
 
 // @author  Mikhail Kirillov <mikkirillov@yandex.ru>
-// @version 1.001
-// @date    2018-11-29
+// @version 1.002
+// @date    2019-10-01
 
 import (
 	"math/rand"
@@ -37,4 +37,24 @@ func Reverse(slice interface{}) {
 		swap(i, j)
 		j--
 	}
+}
+
+func Contain(list interface{}, obj interface{}) (bool, int) {
+
+	if list == nil {
+		return false, -1
+	}
+
+	if reflect.TypeOf(list).Kind() == reflect.Slice || reflect.TypeOf(list).Kind() == reflect.Array {
+
+		listvalue := reflect.ValueOf(list)
+
+		for i := 0; i < listvalue.Len(); i++ {
+			if obj == listvalue.Index(i).Interface() {
+				return true, i
+			}
+		}
+	}
+
+	return false, -1
 }
