@@ -1,7 +1,7 @@
 package slice
 
 // @author  Mikhail Kirillov <mikkirillov@yandex.ru>
-// @version 1.002
+// @version 1.003
 // @date    2019-10-01
 
 import (
@@ -57,4 +57,56 @@ func Contain(list interface{}, obj interface{}) (bool, int) {
 	}
 
 	return false, -1
+}
+
+func Equal(l1 interface{}, l2 interface{}) bool {
+
+	if l1 == nil && l2 == nil {
+		return true
+	}
+
+	if l1 == nil {
+
+		if reflect.TypeOf(l2).Kind() == reflect.Slice || reflect.TypeOf(l2).Kind() == reflect.Array {
+			return reflect.ValueOf(l2).Len() == 0
+		}
+
+		return false
+	}
+
+	if l2 == nil {
+
+		if reflect.TypeOf(l1).Kind() == reflect.Slice || reflect.TypeOf(l1).Kind() == reflect.Array {
+			return reflect.ValueOf(l1).Len() == 0
+		}
+
+		return false
+	}
+
+	v1 := reflect.ValueOf(l1)
+	k1 := v1.Type().Kind()
+
+	if k1 == reflect.Slice || k1 == reflect.Array {
+
+		v2 := reflect.ValueOf(l2)
+		k2 := v2.Type().Kind()
+
+		if k2 == reflect.Slice || k2 == reflect.Array {
+
+			if v1.Len() == v2.Len() {
+
+				for i := 0; i < v1.Len(); i++ {
+					if v1.Index(i).Interface() != v2.Index(i).Interface() {
+						return false
+					}
+
+				}
+
+				return true
+
+			}
+		}
+	}
+
+	return false
 }
